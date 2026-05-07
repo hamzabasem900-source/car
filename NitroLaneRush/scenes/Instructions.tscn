@@ -113,7 +113,7 @@ theme_override_font_sizes/font_size = 14
 custom_minimum_size = Vector2(0, 16)
 
 [node name="Instruction5" type="Label" parent="UI/Panel/VBox"]
-text = "🏁   Reach 3000 meters to WIN"
+text = "🏁   Reach 500 meters to WIN"
 theme_override_colors/font_color = Color(1.0, 0.9, 0.0, 1.0)
 theme_override_font_sizes/font_size = 18
 
