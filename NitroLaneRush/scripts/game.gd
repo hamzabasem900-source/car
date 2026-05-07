@@ -12,6 +12,8 @@ extends Node2D
 @export var max_nitro: float = 100.0
 @export var nitro_drain_rate: float = 20.0     # Per second when active
 @export var nitro_boost_multiplier: float = 1.7
+@export var nitro_permanent_speed_bonus: float = 25.0  # Permanent speed gained each nitro activation
+@export var max_nitro_permanent_bonus: float = 125.0  # Safety cap for stacked nitro speed
 @export var enemy_spawn_interval: float = 2.0
 @export var nitro_spawn_interval: float = 5.0
 @export var lane_positions: Array[float] = [120.0, 240.0, 360.0]
@@ -45,6 +47,7 @@ var road_height: float = 854.0
 var screen_shake_amount: float = 0.0
 var original_camera_pos: Vector2
 var score_accumulator: float = 0.0
+var permanent_nitro_speed_bonus: float = 0.0
 
 # Track recently used lanes to prevent unfair spawning
 var lane_last_spawn_time: Array[float] = [0.0, 0.0, 0.0]
@@ -129,8 +132,11 @@ func _update_speed(delta: float) -> void:
 	# before it becomes unfair near the finish line.
 	var progress: float = _get_distance_progress()
 	var smooth_progress: float = progress * progress * (3.0 - 2.0 * progress)
-	var target_speed: float = lerpf(base_road_speed, max_road_speed, smooth_progress)
-	current_road_speed = move_toward(current_road_speed, target_speed, speed_increase_rate * delta)
+	var progress_bonus_scale: float = lerpf(0.5, 1.0, progress)
+	var stacked_nitro_bonus: float = permanent_nitro_speed_bonus * progress_bonus_scale
+	var target_speed: float = lerpf(base_road_speed, max_road_speed, smooth_progress) + stacked_nitro_bonus
+	var capped_speed: float = minf(target_speed, max_road_speed + max_nitro_permanent_bonus)
+	current_road_speed = move_toward(current_road_speed, capped_speed, speed_increase_rate * delta)
 
 # ── Distance & Score ──────────────────────────────────────────────────────────
 func _update_distance(delta: float) -> void:
@@ -150,6 +156,10 @@ func _handle_nitro_input(delta: float) -> void:
 	if Input.is_action_just_pressed("use_nitro") and nitro > 5.0:
 		if not is_nitro_active:
 			is_nitro_active = true
+			permanent_nitro_speed_bonus = minf(
+				permanent_nitro_speed_bonus + nitro_permanent_speed_bonus,
+				max_nitro_permanent_bonus
+			)
 			if player and player.has_method("activate_nitro"):
 				player.activate_nitro()
 			if hud and hud.has_method("show_nitro_activate"):
@@ -208,8 +218,6 @@ func _spawn_enemy() -> void:
 
 	if enemy.has_method("setup"):
 		enemy.call("setup", chosen_lane, current_road_speed)
-
-	enemies_container.add_child(enemy)
 
 	enemies_container.add_child(enemy)
 

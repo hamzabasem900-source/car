@@ -83,7 +83,9 @@ NitroLaneRush/
 - Collect blue ⚡ pickups on the road
 - Press Space to activate when charged
 - Drains 20 units/second
-- Increases road speed × 1.7 temporarily
+- Gives a temporary ×1.7 boost while active
+- Every nitro activation also adds a permanent speed bonus until the finish line
+- The permanent nitro bonus scales with distance progress, so each nitro matters more later in the race without exceeding the safety cap
 
 ### Lives & Damage
 - 3 lives total
@@ -97,7 +99,7 @@ NitroLaneRush/
 - 4 types: Slow Car, Fast Car, Truck, Obstacle
 - Lane cooldown prevents unfair triple-spawn
 - Difficulty increases every meter traveled
-- Road speed ramps from the base speed toward the max speed based on distance progress, using a smooth curve so the race gets faster without becoming unfair.
+- Road speed ramps from the base speed toward the max speed based on distance progress, using a smooth curve so the race gets faster without becoming unfair. Nitro activations add capped permanent speed on top of that ramp until the finish line.
 
 ### Win / Lose
 - Win: Reach 500 meters. This shorter default makes the victory screen easy to verify during testing.
@@ -135,7 +137,9 @@ In `Game.tscn` → `Game` node, you can tune:
 - `base_road_speed` — Starting speed (default: 250)
 - `max_road_speed` — Maximum speed (default: 480)
 - `enemy_spawn_interval` — How often enemies spawn
-- `nitro_boost_multiplier` — Nitro speed factor
+- `nitro_boost_multiplier` — Temporary nitro speed factor
+- `nitro_permanent_speed_bonus` — Permanent speed added by each nitro activation
+- `max_nitro_permanent_bonus` — Safety cap for stacked permanent nitro speed
 
 ---
 
