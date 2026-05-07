@@ -1,0 +1,168 @@
+[gd_scene load_steps=4 format=3 uid="uid://main_menu"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.02, 0.05, 0.18, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.0, 0.8, 1.0, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.0, 0.5, 0.9, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.0, 1.0, 1.0, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1")
+
+[node name="CityBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.08, 1.0)
+
+[node name="NeonGrid" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0, 0.0, 0.0, 0.0)
+
+[node name="RoadScroll" type="ColorRect" parent="."]
+offset_left = 80.0
+offset_top = -854.0
+offset_right = 400.0
+offset_bottom = 0.0
+color = Color(0.1, 0.1, 0.15, 0.6)
+
+[node name="LaneLines" type="Node2D" parent="RoadScroll"]
+
+[node name="Lane1" type="ColorRect" parent="LaneLines"]
+offset_left = 55.0
+offset_top = 0.0
+offset_right = 59.0
+offset_bottom = 854.0
+color = Color(1.0, 0.8, 0.0, 0.5)
+
+[node name="Lane2" type="ColorRect" parent="LaneLines"]
+offset_left = 175.0
+offset_top = 0.0
+offset_right = 179.0
+offset_bottom = 854.0
+color = Color(1.0, 0.8, 0.0, 0.5)
+
+[node name="Lane3" type="ColorRect" parent="LaneLines"]
+offset_left = 295.0
+offset_top = 0.0
+offset_right = 299.0
+offset_bottom = 854.0
+color = Color(1.0, 0.8, 0.0, 0.5)
+
+[node name="GlowBottom" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 600.0
+offset_right = 480.0
+offset_bottom = 854.0
+color = Color(0.0, 0.1, 0.4, 0.4)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TitleLabel" type="Label" parent="UI"]
+offset_left = 0.0
+offset_top = 80.0
+offset_right = 480.0
+offset_bottom = 220.0
+horizontal_alignment = 1
+text = "NITRO
+LANE RUSH"
+theme_override_colors/font_color = Color(0.0, 0.9, 1.0, 1.0)
+theme_override_font_sizes/font_size = 52
+
+[node name="TitleGlow" type="Label" parent="UI"]
+offset_left = 2.0
+offset_top = 82.0
+offset_right = 482.0
+offset_bottom = 222.0
+horizontal_alignment = 1
+text = "NITRO
+LANE RUSH"
+theme_override_colors/font_color = Color(0.0, 0.4, 0.8, 0.5)
+theme_override_font_sizes/font_size = 52
+
+[node name="SubTitle" type="Label" parent="UI"]
+offset_left = 0.0
+offset_top = 230.0
+offset_right = 480.0
+offset_bottom = 265.0
+horizontal_alignment = 1
+text = "▶  CYBERPUNK RACING  ◀"
+theme_override_colors/font_color = Color(0.6, 0.0, 1.0, 0.9)
+theme_override_font_sizes/font_size = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+offset_left = 120.0
+offset_top = 320.0
+offset_right = 360.0
+offset_bottom = 560.0
+custom_minimum_size = Vector2(240, 0)
+alignment = 1
+
+[node name="StartButton" type="Button" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 55)
+text = "▶  START GAME"
+theme_override_colors/font_color = Color(0.0, 1.0, 0.9, 1.0)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+
+[node name="Spacer1" type="Control" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 14)
+
+[node name="InstructionsButton" type="Button" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 55)
+text = "?  INSTRUCTIONS"
+theme_override_colors/font_color = Color(0.0, 1.0, 0.9, 1.0)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+
+[node name="Spacer2" type="Control" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 14)
+
+[node name="ExitButton" type="Button" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 55)
+text = "✕  EXIT"
+theme_override_colors/font_color = Color(0.0, 1.0, 0.9, 1.0)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+
+[node name="VersionLabel" type="Label" parent="UI"]
+offset_left = 0.0
+offset_top = 820.0
+offset_right = 480.0
+offset_bottom = 854.0
+horizontal_alignment = 1
+text = "v1.0  |  Use Arrow Keys to Drive"
+theme_override_colors/font_color = Color(0.3, 0.3, 0.5, 0.7)
+theme_override_font_sizes/font_size = 12
+
+[node name="LobbyMusic" type="AudioStreamPlayer" parent="."]
+autoplay = false
+volume_db = -5.0
+
+[node name="ButtonSFX" type="AudioStreamPlayer" parent="."]
+volume_db = 0.0
