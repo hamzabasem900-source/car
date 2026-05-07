@@ -211,6 +211,8 @@ func _spawn_enemy() -> void:
 
 	enemies_container.add_child(enemy)
 
+	enemies_container.add_child(enemy)
+
 func _spawn_nitro_pickup() -> void:
 	if not game_active or not nitro_pickup_scene:
 		return
