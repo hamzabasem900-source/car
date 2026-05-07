@@ -7,7 +7,7 @@ A cyberpunk top-down arcade racing game built with Godot 4.
 ## 🚗 Game Overview
 - **Genre:** Top-Down 2D Arcade Racer
 - **Style:** Cyberpunk / Neon Night City
-- **Goal:** Survive 3000 meters of traffic to win
+- **Goal:** Survive 500 meters of traffic to win
 - **Lives:** 3 hearts
 - **Controls:** Arrow Keys or WASD + Space for Nitro
 
@@ -83,7 +83,9 @@ NitroLaneRush/
 - Collect blue ⚡ pickups on the road
 - Press Space to activate when charged
 - Drains 20 units/second
-- Increases road speed × 1.7 temporarily
+- Gives a temporary ×1.7 boost while active
+- Every nitro activation also adds a permanent speed bonus until the finish line
+- The permanent nitro bonus scales with distance progress, so each nitro matters more later in the race without exceeding the safety cap
 
 ### Lives & Damage
 - 3 lives total
@@ -97,11 +99,18 @@ NitroLaneRush/
 - 4 types: Slow Car, Fast Car, Truck, Obstacle
 - Lane cooldown prevents unfair triple-spawn
 - Difficulty increases every meter traveled
+- Road speed ramps from the base speed toward the max speed based on distance progress, using a smooth curve so the race gets faster without becoming unfair. Nitro activations add capped permanent speed on top of that ramp until the finish line.
 
 ### Win / Lose
-- Win: Reach 3000 meters
-- Lose: 0 lives remaining
-- Both save score to GameData singleton
+- Win: Reach 500 meters. This shorter default makes the victory screen easy to verify during testing.
+- The HUD shows the goal, meters remaining, and a percentage-to-win progress label under the nitro bar.
+- Lose: 0 lives remaining.
+- Both save score to GameData singleton.
+
+### Testing the Win Screen Faster
+- Open `Game.tscn`, select the root `Game` node, and lower `max_distance` temporarily, for example to `80`.
+- Start the game and drive until the progress reaches 100%.
+- The game stops spawning, plays `WinSFX` if assigned, saves the score, then opens `WinScreen.tscn`.
 
 ---
 
@@ -117,18 +126,20 @@ NitroLaneRush/
 - Connect them in each scene via the Inspector
 
 ### 3. Add Audio Files
-- See `audio/README.md` for the required file list
-- Place all .ogg and .wav files in `res://audio/`
-- Enable Loop on music files in import settings
-- Connect each file to its AudioStreamPlayer node
+- See `audio/README.md` for the exact file names and node mapping.
+- Place all `.ogg` and `.wav` files in `res://audio/`.
+- Enable Loop on `lobby_music.ogg`, `gameplay_music.ogg`, and `engine_loop.ogg`.
+- Assign every file to its matching `AudioStreamPlayer.stream` property in the Inspector.
 
 ### 4. Adjust Inspector Values
 In `Game.tscn` → `Game` node, you can tune:
-- `max_distance` — How far to win (default: 3000)
+- `max_distance` — How far to win (default: 500)
 - `base_road_speed` — Starting speed (default: 250)
-- `max_road_speed` — Maximum speed (default: 600)
+- `max_road_speed` — Maximum speed (default: 480)
 - `enemy_spawn_interval` — How often enemies spawn
-- `nitro_boost_multiplier` — Nitro speed factor
+- `nitro_boost_multiplier` — Temporary nitro speed factor
+- `nitro_permanent_speed_bonus` — Permanent speed added by each nitro activation
+- `max_nitro_permanent_bonus` — Safety cap for stacked permanent nitro speed
 
 ---
 
