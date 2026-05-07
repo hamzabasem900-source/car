@@ -44,7 +44,7 @@ mouse_filter = 2
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 472.0
-offset_bottom = 105.0
+offset_bottom = 132.0
 theme_override_styles/panel = SubResource("HUDPanelStyle")
 
 [node name="ScoreLabel" type="Label" parent="HUDPanel"]
@@ -112,3 +112,33 @@ text = "⚡ NITRO BOOST ⚡"
 theme_override_colors/font_color = Color(0.0, 1.0, 1.0, 1.0)
 theme_override_font_sizes/font_size = 16
 visible = false
+
+[node name="ObjectiveLabel" type="Label" parent="HUDPanel"]
+offset_left = 10.0
+offset_top = 102.0
+offset_right = 460.0
+offset_bottom = 128.0
+horizontal_alignment = 1
+text = "GOAL: REACH 300m TO WIN"
+theme_override_colors/font_color = Color(1.0, 0.9, 0.2, 1.0)
+theme_override_font_sizes/font_size = 15
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = 8.0
+offset_top = 138.0
+offset_right = 472.0
+offset_bottom = 150.0
+max_value = 300.0
+value = 0.0
+show_percentage = false
+theme_override_styles/fill = SubResource("NitroBarFill")
+
+[node name="ProgressLabel" type="Label" parent="."]
+offset_left = 8.0
+offset_top = 152.0
+offset_right = 472.0
+offset_bottom = 176.0
+horizontal_alignment = 1
+text = "0% TO WIN • 300m LEFT"
+theme_override_colors/font_color = Color(1.0, 0.9, 0.2, 1.0)
+theme_override_font_sizes/font_size = 13

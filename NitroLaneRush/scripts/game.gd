@@ -4,7 +4,7 @@ extends Node2D
 # Controls all gameplay systems: score, distance, lives, nitro, difficulty, spawning
 
 # ── Exports (tunable from Inspector) ─────────────────────────────────────────
-@export var max_distance: float = 3000.0       # Distance to win (meters)
+@export var max_distance: float = 300.0        # Distance to win (meters)
 @export var base_road_speed: float = 250.0     # Starting scroll speed
 @export var max_road_speed: float = 600.0      # Maximum scroll speed
 @export var speed_increase_rate: float = 8.0   # Speed gain per second
@@ -30,6 +30,7 @@ extends Node2D
 @onready var enemies_container: Node2D = $EnemiesContainer
 @onready var pickups_container: Node2D = $PickupsContainer
 @onready var progress_bar: ProgressBar = $HUD/ProgressBar
+@onready var progress_label: Label = $HUD/ProgressLabel
 
 # ── State Variables ───────────────────────────────────────────────────────────
 var score: int = 0
@@ -301,3 +302,7 @@ func _update_hud() -> void:
 	if progress_bar:
 		progress_bar.max_value = max_distance
 		progress_bar.value = clampf(distance, 0.0, max_distance)
+	if progress_label:
+		var percent := int((clampf(distance, 0.0, max_distance) / max_distance) * 100.0)
+		var meters_left := max(0, int(ceil(max_distance - distance)))
+		progress_label.text = "%d%% TO WIN • %dm LEFT" % [percent, meters_left]
