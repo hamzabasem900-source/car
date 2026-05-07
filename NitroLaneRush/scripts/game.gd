@@ -100,7 +100,7 @@ func _process(delta: float) -> void:
 
 # ── Road Scrolling ────────────────────────────────────────────────────────────
 func _scroll_road(delta: float) -> void:
-	var speed = current_road_speed * _get_nitro_multiplier()
+	var speed: float = current_road_speed * _get_nitro_multiplier()
 	road_scroll_y += speed * delta
 
 	# Two-tile seamless scroll
@@ -127,20 +127,20 @@ func _get_distance_progress() -> float:
 func _update_speed(delta: float) -> void:
 	# Progress-based speed ramp: starts gentle, rises through the middle, and caps
 	# before it becomes unfair near the finish line.
-	var progress := _get_distance_progress()
-	var smooth_progress := progress * progress * (3.0 - 2.0 * progress)
-	var target_speed := lerpf(base_road_speed, max_road_speed, smooth_progress)
+	var progress: float = _get_distance_progress()
+	var smooth_progress: float = progress * progress * (3.0 - 2.0 * progress)
+	var target_speed: float = lerpf(base_road_speed, max_road_speed, smooth_progress)
 	current_road_speed = move_toward(current_road_speed, target_speed, speed_increase_rate * delta)
 
 # ── Distance & Score ──────────────────────────────────────────────────────────
 func _update_distance(delta: float) -> void:
-	var effective_speed = current_road_speed * _get_nitro_multiplier()
+	var effective_speed: float = current_road_speed * _get_nitro_multiplier()
 	distance += (effective_speed / 100.0) * delta  # Convert to meters
 
 func _update_score(delta: float) -> void:
-	var rate = 10.0 * _get_nitro_multiplier()
+	var rate: float = 10.0 * _get_nitro_multiplier()
 	score_accumulator += rate * delta * (current_road_speed / base_road_speed)
-	var points_to_add := int(score_accumulator)
+	var points_to_add: int = int(score_accumulator)
 	if points_to_add > 0:
 		score += points_to_add
 		score_accumulator -= float(points_to_add)
@@ -175,7 +175,7 @@ func _spawn_enemy() -> void:
 
 	# Pick a fair lane
 	var available_lanes: Array[int] = []
-	var current_time = Time.get_ticks_msec() / 1000.0
+	var current_time: float = Time.get_ticks_msec() / 1000.0
 	for i in range(3):
 		if current_time - lane_last_spawn_time[i] >= min_lane_gap:
 			available_lanes.append(i)
@@ -183,16 +183,16 @@ func _spawn_enemy() -> void:
 	if available_lanes.is_empty():
 		return
 
-	var chosen_lane = available_lanes[randi() % available_lanes.size()]
+	var chosen_lane: int = available_lanes[randi() % available_lanes.size()]
 	lane_last_spawn_time[chosen_lane] = current_time
 
-	var enemy = enemy_scene.instantiate()
+	var enemy: Node2D = enemy_scene.instantiate() as Node2D
 
 	# Pick random enemy type weighted by difficulty before adding the node, so _ready()
 	# initializes speed and visuals from the selected type.
-	var difficulty_factor = _get_distance_progress()
-	var type_roll = randf()
-	var enemy_type = 0  # SLOW_CAR default
+	var difficulty_factor: float = _get_distance_progress()
+	var type_roll: float = randf()
+	var enemy_type: int = 0  # SLOW_CAR default
 	if type_roll < 0.2 + difficulty_factor * 0.2:
 		enemy_type = 3  # OBSTACLE
 	elif type_roll < 0.4 + difficulty_factor * 0.15:
@@ -200,14 +200,16 @@ func _spawn_enemy() -> void:
 	elif type_roll < 0.55:
 		enemy_type = 2  # TRUCK
 
-	enemy.enemy_type = enemy_type
-	enemy.base_speed = 150.0 + difficulty_factor * 150.0
+	enemy.set("enemy_type", enemy_type)
+	enemy.set("base_speed", 150.0 + difficulty_factor * 150.0)
 
-	var spawn_x = lane_positions[chosen_lane]
+	var spawn_x: float = lane_positions[chosen_lane]
 	enemy.position = Vector2(spawn_x, -80.0)
 
 	if enemy.has_method("setup"):
-		enemy.setup(chosen_lane, current_road_speed)
+		enemy.call("setup", chosen_lane, current_road_speed)
+
+	enemies_container.add_child(enemy)
 
 	enemies_container.add_child(enemy)
 
@@ -215,17 +217,17 @@ func _spawn_nitro_pickup() -> void:
 	if not game_active or not nitro_pickup_scene:
 		return
 
-	var lane = randi() % 3
-	var pickup = nitro_pickup_scene.instantiate()
+	var lane: int = randi() % 3
+	var pickup: Node2D = nitro_pickup_scene.instantiate() as Node2D
 	pickups_container.add_child(pickup)
 	pickup.position = Vector2(lane_positions[lane], -60.0)
-	pickup.road_speed = current_road_speed
+	pickup.set("road_speed", current_road_speed)
 
 # ── Difficulty ────────────────────────────────────────────────────────────────
 func _update_difficulty() -> void:
-	var difficulty = _get_distance_progress()
+	var difficulty: float = _get_distance_progress()
 	# Reduce spawn interval as difficulty increases, but keep a readable minimum gap.
-	var new_interval = max(1.1, enemy_spawn_interval - difficulty * 0.8)
+	var new_interval: float = maxf(1.1, enemy_spawn_interval - difficulty * 0.8)
 	if abs(enemy_spawn_timer.wait_time - new_interval) > 0.1:
 		enemy_spawn_timer.wait_time = new_interval
 
@@ -249,8 +251,8 @@ func _on_player_died() -> void:
 # ── Screen Shake ──────────────────────────────────────────────────────────────
 func _handle_screen_shake(delta: float) -> void:
 	if screen_shake_amount > 0:
-		var shake_x = randf_range(-screen_shake_amount, screen_shake_amount)
-		var shake_y = randf_range(-screen_shake_amount, screen_shake_amount)
+		var shake_x: float = randf_range(-screen_shake_amount, screen_shake_amount)
+		var shake_y: float = randf_range(-screen_shake_amount, screen_shake_amount)
 		if camera:
 			camera.position = original_camera_pos + Vector2(shake_x, shake_y)
 		screen_shake_amount = move_toward(screen_shake_amount, 0.0, 40.0 * delta)
@@ -311,6 +313,6 @@ func _update_hud() -> void:
 		progress_bar.max_value = max_distance
 		progress_bar.value = clampf(distance, 0.0, max_distance)
 	if progress_label:
-		var percent := int((clampf(distance, 0.0, max_distance) / max_distance) * 100.0)
-		var meters_left := max(0, int(ceil(max_distance - distance)))
+		var percent: int = int((clampf(distance, 0.0, max_distance) / max_distance) * 100.0)
+		var meters_left: int = maxi(0, int(ceil(max_distance - distance)))
 		progress_label.text = "%d%% TO WIN • %dm LEFT" % [percent, meters_left]

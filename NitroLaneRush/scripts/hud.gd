@@ -36,7 +36,7 @@ func update_distance(distance: float, max_distance: float) -> void:
 	if distance_label:
 		distance_label.text = "DIST\n%dm/%dm" % [int(distance), int(max_distance)]
 	if objective_label:
-		var meters_left := max(0, int(ceil(max_distance - distance)))
+		var meters_left: int = maxi(0, int(ceil(max_distance - distance)))
 		objective_label.text = "GOAL: REACH %dm TO WIN  •  %dm LEFT" % [int(max_distance), meters_left]
 
 func update_speed(speed: float) -> void:
@@ -46,7 +46,7 @@ func update_speed(speed: float) -> void:
 func update_lives(lives: int) -> void:
 	if not lives_container:
 		return
-	var safe_lives := clampi(lives, 0, 9)
+	var safe_lives: int = clampi(lives, 0, 9)
 	if safe_lives == displayed_lives:
 		return
 	displayed_lives = safe_lives
@@ -54,11 +54,11 @@ func update_lives(lives: int) -> void:
 	for child in lives_container.get_children():
 		child.queue_free()
 
-	var heart_text := ""
+	var heart_text: String = ""
 	for i in range(safe_lives):
 		heart_text += "❤"
 
-	var hearts = Label.new()
+	var hearts: Label = Label.new()
 	hearts.text = heart_text
 	hearts.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hearts.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
