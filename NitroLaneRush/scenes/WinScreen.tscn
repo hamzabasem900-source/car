@@ -90,7 +90,7 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 10)
 
 [node name="DistanceLabel" type="Label" parent="UI/Panel/VBoxContainer"]
-text = "DISTANCE: 3000 m"
+text = "DISTANCE: 300 m"
 theme_override_colors/font_color = Color(0.6, 1.0, 0.7, 0.9)
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
