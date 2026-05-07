@@ -13,12 +13,12 @@ var collected: bool = false
 func _ready() -> void:
 	add_to_group("nitro_pickup")
 	# Pulsing glow animation
-	if animation_player:
+	if animation_player and animation_player.has_animation("pulse"):
 		animation_player.play("pulse")
 
 func _process(delta: float) -> void:
 	position.y += road_speed * delta
-	
+
 	# Destroy when off screen
 	if position.y > 950.0:
 		queue_free()

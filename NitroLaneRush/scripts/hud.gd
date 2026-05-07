@@ -11,9 +11,11 @@ extends CanvasLayer
 @onready var nitro_glow: ColorRect = $NitroGlow
 @onready var flash_overlay: ColorRect = $FlashOverlay
 @onready var nitro_active_label: Label = $HUDPanel/NitroActiveLabel
+@onready var objective_label: Label = $HUDPanel/ObjectiveLabel
 
 var flash_tween: Tween = null
 var nitro_glow_tween: Tween = null
+var displayed_lives: int = -1
 
 func _ready() -> void:
 	# Initialize flash overlay
@@ -32,8 +34,10 @@ func update_score(score: int) -> void:
 
 func update_distance(distance: float, max_distance: float) -> void:
 	if distance_label:
-		var pct = int((distance / max_distance) * 100.0)
-		distance_label.text = "DIST\n%dm" % int(distance)
+		distance_label.text = "DIST\n%dm/%dm" % [int(distance), int(max_distance)]
+	if objective_label:
+		var meters_left := max(0, int(ceil(max_distance - distance)))
+		objective_label.text = "GOAL: REACH %dm TO WIN  •  %dm LEFT" % [int(max_distance), meters_left]
 
 func update_speed(speed: float) -> void:
 	if speed_label:
@@ -42,16 +46,26 @@ func update_speed(speed: float) -> void:
 func update_lives(lives: int) -> void:
 	if not lives_container:
 		return
-	# Clear existing hearts
+	var safe_lives := clampi(lives, 0, 9)
+	if safe_lives == displayed_lives:
+		return
+	displayed_lives = safe_lives
+
 	for child in lives_container.get_children():
 		child.queue_free()
-	# Add heart icons
-	for i in range(lives):
-		var heart = Label.new()
-		heart.text = "❤"
-		heart.add_theme_color_override("font_color", Color(1.0, 0.2, 0.4))
-		heart.add_theme_font_size_override("font_size", 24)
-		lives_container.add_child(heart)
+
+	var heart_text := ""
+	for i in range(safe_lives):
+		heart_text += "❤"
+
+	var hearts = Label.new()
+	hearts.text = heart_text
+	hearts.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hearts.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hearts.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hearts.add_theme_color_override("font_color", Color(1.0, 0.2, 0.4))
+	hearts.add_theme_font_size_override("font_size", 20)
+	lives_container.add_child(hearts)
 
 func update_nitro(nitro: float, max_nitro: float) -> void:
 	if nitro_bar:

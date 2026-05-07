@@ -50,21 +50,21 @@ color = Color(0.1, 0.1, 0.15, 0.6)
 
 [node name="LaneLines" type="Node2D" parent="RoadScroll"]
 
-[node name="Lane1" type="ColorRect" parent="LaneLines"]
+[node name="Lane1" type="ColorRect" parent="RoadScroll/LaneLines"]
 offset_left = 55.0
 offset_top = 0.0
 offset_right = 59.0
 offset_bottom = 854.0
 color = Color(1.0, 0.8, 0.0, 0.5)
 
-[node name="Lane2" type="ColorRect" parent="LaneLines"]
+[node name="Lane2" type="ColorRect" parent="RoadScroll/LaneLines"]
 offset_left = 175.0
 offset_top = 0.0
 offset_right = 179.0
 offset_bottom = 854.0
 color = Color(1.0, 0.8, 0.0, 0.5)
 
-[node name="Lane3" type="ColorRect" parent="LaneLines"]
+[node name="Lane3" type="ColorRect" parent="RoadScroll/LaneLines"]
 offset_left = 295.0
 offset_top = 0.0
 offset_right = 299.0
