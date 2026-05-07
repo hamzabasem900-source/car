@@ -80,8 +80,9 @@ theme_override_font_sizes/font_size = 14
 [node name="LivesContainer" type="HBoxContainer" parent="HUDPanel"]
 offset_left = 390.0
 offset_top = 8.0
-offset_right = 458.0
+offset_right = 462.0
 offset_bottom = 42.0
+alignment = 1
 
 [node name="NitroLabel" type="Label" parent="HUDPanel"]
 offset_left = 10.0
@@ -119,7 +120,7 @@ offset_top = 102.0
 offset_right = 460.0
 offset_bottom = 128.0
 horizontal_alignment = 1
-text = "GOAL: REACH 300m TO WIN"
+text = "GOAL: REACH 500m TO WIN"
 theme_override_colors/font_color = Color(1.0, 0.9, 0.2, 1.0)
 theme_override_font_sizes/font_size = 15
 
@@ -128,7 +129,7 @@ offset_left = 8.0
 offset_top = 138.0
 offset_right = 472.0
 offset_bottom = 150.0
-max_value = 300.0
+max_value = 500.0
 value = 0.0
 show_percentage = false
 theme_override_styles/fill = SubResource("NitroBarFill")
@@ -139,6 +140,6 @@ offset_top = 152.0
 offset_right = 472.0
 offset_bottom = 176.0
 horizontal_alignment = 1
-text = "0% TO WIN • 300m LEFT"
+text = "0% TO WIN • 500m LEFT"
 theme_override_colors/font_color = Color(1.0, 0.9, 0.2, 1.0)
 theme_override_font_sizes/font_size = 13

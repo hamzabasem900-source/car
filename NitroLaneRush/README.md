@@ -7,7 +7,7 @@ A cyberpunk top-down arcade racing game built with Godot 4.
 ## 🚗 Game Overview
 - **Genre:** Top-Down 2D Arcade Racer
 - **Style:** Cyberpunk / Neon Night City
-- **Goal:** Survive 300 meters of traffic to win
+- **Goal:** Survive 500 meters of traffic to win
 - **Lives:** 3 hearts
 - **Controls:** Arrow Keys or WASD + Space for Nitro
 
@@ -97,9 +97,10 @@ NitroLaneRush/
 - 4 types: Slow Car, Fast Car, Truck, Obstacle
 - Lane cooldown prevents unfair triple-spawn
 - Difficulty increases every meter traveled
+- Road speed ramps from the base speed toward the max speed based on distance progress, using a smooth curve so the race gets faster without becoming unfair.
 
 ### Win / Lose
-- Win: Reach 300 meters. This shorter default makes the victory screen easy to verify during testing.
+- Win: Reach 500 meters. This shorter default makes the victory screen easy to verify during testing.
 - The HUD shows the goal, meters remaining, and a percentage-to-win progress label under the nitro bar.
 - Lose: 0 lives remaining.
 - Both save score to GameData singleton.
@@ -130,9 +131,9 @@ NitroLaneRush/
 
 ### 4. Adjust Inspector Values
 In `Game.tscn` → `Game` node, you can tune:
-- `max_distance` — How far to win (default: 300)
+- `max_distance` — How far to win (default: 500)
 - `base_road_speed` — Starting speed (default: 250)
-- `max_road_speed` — Maximum speed (default: 600)
+- `max_road_speed` — Maximum speed (default: 480)
 - `enemy_spawn_interval` — How often enemies spawn
 - `nitro_boost_multiplier` — Nitro speed factor
 

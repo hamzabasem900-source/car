@@ -4,10 +4,10 @@ extends Node2D
 # Controls all gameplay systems: score, distance, lives, nitro, difficulty, spawning
 
 # ── Exports (tunable from Inspector) ─────────────────────────────────────────
-@export var max_distance: float = 300.0        # Distance to win (meters)
+@export var max_distance: float = 500.0        # Distance to win (meters)
 @export var base_road_speed: float = 250.0     # Starting scroll speed
-@export var max_road_speed: float = 600.0      # Maximum scroll speed
-@export var speed_increase_rate: float = 8.0   # Speed gain per second
+@export var max_road_speed: float = 480.0      # Maximum scroll speed
+@export var speed_increase_rate: float = 45.0  # How quickly speed eases toward the progress target
 @export var max_lives: int = 3
 @export var max_nitro: float = 100.0
 @export var nitro_drain_rate: float = 20.0     # Per second when active
@@ -121,8 +121,16 @@ func _get_nitro_multiplier() -> float:
 	return 1.0
 
 # ── Speed System ──────────────────────────────────────────────────────────────
+func _get_distance_progress() -> float:
+	return clampf(distance / max_distance, 0.0, 1.0)
+
 func _update_speed(delta: float) -> void:
-	current_road_speed = min(current_road_speed + speed_increase_rate * delta, max_road_speed)
+	# Progress-based speed ramp: starts gentle, rises through the middle, and caps
+	# before it becomes unfair near the finish line.
+	var progress := _get_distance_progress()
+	var smooth_progress := progress * progress * (3.0 - 2.0 * progress)
+	var target_speed := lerpf(base_road_speed, max_road_speed, smooth_progress)
+	current_road_speed = move_toward(current_road_speed, target_speed, speed_increase_rate * delta)
 
 # ── Distance & Score ──────────────────────────────────────────────────────────
 func _update_distance(delta: float) -> void:
@@ -182,7 +190,7 @@ func _spawn_enemy() -> void:
 
 	# Pick random enemy type weighted by difficulty before adding the node, so _ready()
 	# initializes speed and visuals from the selected type.
-	var difficulty_factor = distance / max_distance
+	var difficulty_factor = _get_distance_progress()
 	var type_roll = randf()
 	var enemy_type = 0  # SLOW_CAR default
 	if type_roll < 0.2 + difficulty_factor * 0.2:
@@ -215,9 +223,9 @@ func _spawn_nitro_pickup() -> void:
 
 # ── Difficulty ────────────────────────────────────────────────────────────────
 func _update_difficulty() -> void:
-	var difficulty = distance / max_distance
-	# Reduce spawn interval as difficulty increases
-	var new_interval = max(0.8, enemy_spawn_interval - difficulty * 1.2)
+	var difficulty = _get_distance_progress()
+	# Reduce spawn interval as difficulty increases, but keep a readable minimum gap.
+	var new_interval = max(1.1, enemy_spawn_interval - difficulty * 0.8)
 	if abs(enemy_spawn_timer.wait_time - new_interval) > 0.1:
 		enemy_spawn_timer.wait_time = new_interval
 
